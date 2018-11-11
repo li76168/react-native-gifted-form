@@ -52,7 +52,7 @@ module.exports = createReactClass({
     let backIcon = this.props.backIcon ?
       <TouchableOpacity onPress={this.props.onBackIconPress}>
         <Image
-          style={{ width: 20, height: 20, marginRight: 20 }}
+          style={this.props.backIconStyle}
           source={this.props.backIcon} />
       </TouchableOpacity> :
       null
