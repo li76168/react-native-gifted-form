@@ -3,7 +3,9 @@ import createReactClass from 'create-react-class';
 import {
   View,
   Text,
+  Image,
   TextInput,
+  TouchableOpacity,
   PixelRatio
 } from 'react-native';
 
@@ -23,31 +25,38 @@ module.exports = createReactClass({
       onTextInputBlur: (value) => value
     }
   },
-  
+
   getInitialState() {
     return {
       focused: false,
     }
   },
-  
+
   _renderTitle() {
     if (this.props.title !== '') {
       return (
-        <Text 
+        <Text
           numberOfLines={1}
           style={this.getStyle(['textInputTitleInline'])}
         >
           {this.props.title}
         </Text>
-      );      
+      );
     }
     return (
-      <View style={this.getStyle(['spacer'])}/>
+      <View style={this.getStyle(['spacer'])} />
     );
   },
 
   _renderRow() {
-    
+    let backIcon = this.props.backIcon ?
+      <TouchableOpacity onPress={this.props.onBackIconPress}>
+        <Image
+          style={{ width: 20, height: 20, marginRight: 20 }}
+          source={this.props.backIcon} />
+      </TouchableOpacity> :
+      null
+
     if (this.props.inline === false) {
       return (
         <View style={this.getStyle(['rowContainer'])}>
@@ -55,17 +64,17 @@ module.exports = createReactClass({
             {this._renderImage()}
             <Text numberOfLines={1} style={this.getStyle(['textInputTitle'])}>{this.props.title}</Text>
           </View>
-          
+
           <TextInput
             ref='input'
             style={this.getStyle(['textInput'])}
-          
+
             {...this.props}
-            
+
             onFocus={this.onFocus}
             onBlur={this.onBlur}
-            
-            
+
+
             onChangeText={this._onChange}
             value={this.state.value}
           />
@@ -73,7 +82,7 @@ module.exports = createReactClass({
           {this._renderUnderline()}
         </View>
       );
-    } 
+    }
     return (
       <View style={this.getStyle(['rowContainer'])}>
         <View style={this.getStyle(['row'])}>
@@ -84,13 +93,14 @@ module.exports = createReactClass({
             style={this.getStyle(['textInputInline'])}
 
             {...this.props}
-            
+
             onFocus={this.onFocus}
             onBlur={this.onBlur}
-            
+
             onChangeText={this._onChange}
             value={this.state.value}
           />
+          {backIcon}
         </View>
         {this._renderValidationError()}
         {this._renderUnderline()}
@@ -98,7 +108,7 @@ module.exports = createReactClass({
     );
 
   },
-  
+
   onFocus() {
     this.setState({
       focused: true,
@@ -109,19 +119,19 @@ module.exports = createReactClass({
     if (newText !== oldText) {
       this._onChange(newText);
     }
-    
+
   },
-  
+
   onBlur() {
     this.setState({
       focused: false,
-    });    
+    });
     this.props.onBlur();
     this.props.onTextInputBlur(this.state.value);
   },
-  
-  
-  
+
+
+
   _renderUnderline() {
     if (this.props.underlined === true) {
       if (this.state.focused === false) {
@@ -129,7 +139,7 @@ module.exports = createReactClass({
           <View
             style={this.getStyle(['underline', 'underlineIdle'])}
           />
-        );        
+        );
       }
       return (
         <View
@@ -139,11 +149,11 @@ module.exports = createReactClass({
     }
     return null;
   },
-  
+
   render() {
     return this._renderRow();
   },
-  
+
   defaultStyles: {
     rowImage: {
       height: 20,
